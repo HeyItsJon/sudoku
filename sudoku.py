@@ -1,11 +1,42 @@
 from time import sleep
 
-class Cell:
-    def __init__(self, row, col):
-        self.row = row
-        self.col = col
-        self.value = [1,2,3,4,5,6,7,8,9]
-        self.checked = False
+class Grid:
+    def __init__(self):
+        #vals = [1,2,3,4,5,6,7,8,9]
+        #cell = [vals, False]
+        #row = [cell,cell,cell,cell,cell,cell,cell,cell,cell]
+        #self.grid = [row,row,row,row,row,row,row,row,row]
+        self.grid = [[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]]]
+
+    def DrawGrid(self):
+        print(' _______________________ ')
+        print('|       |       |       |')
+        for row in range(0,9):
+            tmp = '| '
+            for col in range(0,9):
+                if len(self.grid[row][col][0]) == 1:
+                    tmp += (str(self.grid[row][col][0][0]) + ' ')
+                else:
+                    tmp += '  '
+                if col == 2 or col == 5:
+                    tmp += '| '
+            tmp += '|'
+            print(tmp)
+            if row == 2 or row == 5:
+                print('|_______|_______|_______|')
+                print('|       |       |       |')
+        print('|_______|_______|_______|')
+
+    def InitializeGrid(self,path):
+        f = open(path)
+        r = 0
+        for l in f.readlines():
+            vals = l.rstrip().split(',')
+            for c in range(0,9):
+                if int(vals[c]) != 0:
+                    self.grid[r][c][0] = [int(vals[c])] # THIS F'IN LINE
+            r += 1
+        f.close()
 
 '''
 open file
@@ -24,44 +55,8 @@ while not solved:
 (additional logic?)
 '''
 
-def CheckIfSolved(grid):
-    pass
 
-def DrawGrid(grid):
-    print(' _______________________ ')
-    print('|       |       |       |')
-    for x in range(0,9):
-        tmp = '| '
-        for y in range(0,9):
-            for c in grid:
-                if (c.row == x and c.col == y):
-                    if len(c.value) == 1:
-                        tmp += (str(c.value))[1] + ' '
-                    else:
-                        tmp += '  '
-            if y == 2 or y == 5:
-                tmp += '| '
-        tmp += '|'
-        print(tmp)
-        if x == 2 or x == 5:
-            print('|_______|_______|_______|')
-            print('|       |       |       |')
-    print('|_______|_______|_______|')
-
-def InitializeGrid(grid):
-    f = open('sudoku.txt')
-    row = 0
-    for l in f.readlines():
-        vals = l.rstrip().split(',')
-        for col in range(0,9):
-            if int(vals[col]) != 0:
-                for c in grid:
-                    if(c.row == row and c.col == col):
-                        c.value = [int(vals[col])]
-        row +=1 
-    f.close()
-    return grid
-
+'''
 def RemoveValue(grid, cell):
     value = cell.value[0]
     # brute force it...
@@ -92,7 +87,14 @@ def RemoveValue(grid, cell):
                     grid[i].value.remove(value)
 
     return grid
+'''
 
+#debug
+s = Grid()
+s.InitializeGrid('sudoku.txt')
+s.DrawGrid()
+
+'''
 g = []
 for x in range(0,9):
     for y in range(0,9):
@@ -114,6 +116,6 @@ for c in g:
         g = RemoveValue(g, c)
         DrawGrid(g)
         sleep(1)
-
+'''
 
 
