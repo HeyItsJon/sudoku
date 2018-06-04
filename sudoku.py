@@ -1,12 +1,11 @@
 from time import sleep
+from os import system
+from math import floor
+from sys import exit
 
 class Grid:
     def __init__(self):
-        #vals = [1,2,3,4,5,6,7,8,9]
-        #cell = [vals, False]
-        #row = [cell,cell,cell,cell,cell,cell,cell,cell,cell]
-        #self.grid = [row,row,row,row,row,row,row,row,row]
-        self.grid = [[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]],[[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False],[[1,2,3,4,5,6,7,8,9],False]]]
+        self.grid = [[[[1,2,3,4,5,6,7,8,9], False] for i in range(0,9)] for j in range(0,9)]
 
     def DrawGrid(self):
         print(' _______________________ ')
@@ -34,88 +33,193 @@ class Grid:
             vals = l.rstrip().split(',')
             for c in range(0,9):
                 if int(vals[c]) != 0:
-                    self.grid[r][c][0] = [int(vals[c])] # THIS F'IN LINE
+                    self.grid[r][c][0] = [int(vals[c])]
             r += 1
         f.close()
 
-'''
-open file
-create 81 Cell objects - row 1-9, column 1-9
-put Cell objects in list?
-go through file and set Cell.value for the known cells
-while not solved:
-    loop through rows
-        loop through columns
-            if Cell.value is a single value
-                go through cells in row and remove that value
-                go through cells in column and remove that value
-                find cells in 3x3 block and remove that value
-    check if we're solved
-    (maybe add in a flag to check if we've gone through each Cell without modifying one - hit a dead end)
-(additional logic?)
-'''
+    def RemoveValueFromCell(self,value,row,col):
+        if value in self.grid[row][col][0] and len(self.grid[row][col][0]) > 1:
+            self.grid[row][col][0].remove(value)
 
+    def RemoveValueFromRow(self,value,row):
+        for col in range(0,9):
+            self.RemoveValueFromCell(value,row,col)
 
-'''
-def RemoveValue(grid, cell):
-    value = cell.value[0]
-    # brute force it...
-    if cell.row < 3:
-        rows = [0,1,2]
-    elif cell.row < 6:
-        rows = [3,4,5]
-    else:
-        rows = [6,7,8]
-    if cell.col < 3:
-        cols = [0,1,2]
-    elif cell.col < 6:
-        cols = [3,4,5]
-    else:
-        cols = [6,7,8]
+    def RemoveValueFromColumn(self,value,col):
+        for row in range(0,9):
+            self.RemoveValueFromCell(value,row,col)
 
-    # remove from common row and column
-    for i in range(0, len(grid)):
-        if (grid[i].row == cell.row or grid[i].col == cell.col) and len(grid[i].value) != 1:
-            grid[i].value.remove(value)
-    
-    # remove from 3x3 square
-    for row in rows:
-        for col in cols:
-            for i in range(0, len(grid)):
-                if (grid[i].row == row or grid[i].col == col) and len(grid[i].value) != 1:
-                    print(str(row) + ',' + str(col) + ': ' + str(value))
-                    grid[i].value.remove(value)
+    def RemoveValueFromGroup(self,value,row,col):
+        y = 3 * floor(row/3)
+        x = 3 * floor(col/3)
+        rows = [i for i in range(y,y+3)]
+        cols = [j for j in range(x,x+3)]
+        for r in rows:
+            for c in cols:
+                self.RemoveValueFromCell(value,r,c)
 
-    return grid
-'''
+    # this function probably isn't necessary
+    def ResetCheckFlags(self):
+        for row in self.grid:
+            for col in row:
+                col[1] = False
+
+    def SimpleScanSinglePass(self):
+        foundmatch = False
+        for row in range(0,9):
+            for col in range(0,9):
+                if len(self.grid[row][col][0]) == 1 and not self.grid[row][col][1]:
+                    foundmatch = True
+                    value = self.grid[row][col][0][0]
+                    self.RemoveValueFromColumn(value,col)
+                    self.RemoveValueFromRow(value,row)
+                    self.RemoveValueFromGroup(value,row,col)
+                    self.grid[row][col][1] = True
+        return foundmatch
+
+    def FindOnlyValueInRow(self):
+        foundmatch = False
+        for row in self.grid:
+            missingValues = []
+            seenValues = []
+            for col in row:
+                if not col[1]:
+                    for val in col[0]:
+                        if val not in missingValues:
+                            missingValues.append(val)
+            for col in row:
+                if not col[1]:
+                    for val in col[0]:
+                        if val not in seenValues:
+                            seenValues.append(val)
+                        else:
+                            if val in missingValues:
+                                missingValues.remove(val)
+            if len(missingValues) > 0:
+                foundmatch = True
+                for val in missingValues:
+                    for col in row:
+                        if val in col[0]:
+                            col[0] = [val]
+        return foundmatch
+
+    def FindOnlyValueInColumn(self):
+        foundmatch = False
+        for x in range(0,9):
+            missingValues = []
+            seenValues = []
+            for y in range(0,9):
+                if not self.grid[y][x][1]:
+                    for val in self.grid[y][x][0]:
+                        if val not in missingValues:
+                            missingValues.append(val)
+            for y in range(0,9):
+                if not self.grid[y][x][1]:
+                    for val in self.grid[y][x][0]:
+                        if val not in seenValues:
+                            seenValues.append(val)
+                        else:
+                            if val in missingValues:
+                                missingValues.remove(val)
+            if len(missingValues) > 0:
+                foundmatch = True
+                for val in missingValues:
+                    for y in range(0,9):
+                        if val in self.grid[y][x][0]:
+                            self.grid[y][x][0] = [val]
+        return foundmatch
+
+    def CheckIfSolved(self):
+        # check if each cell has been checked
+        for row in self.grid:
+            for col in row:
+                if not col[1]:
+                    return False
+        # check rows
+        for row in self.grid:
+            vals = []
+            for col in row:
+                if len(col[0]) != 1:
+                    return False
+                vals.append(col[0][0])
+            # check for duplicate values
+            for i in range(0,9):
+                if vals[i] in vals[i+1:]:
+                    return False
+        # check columns
+        for col in range(0,9):
+            vals = []
+            for row in range(0,9):
+                vals.append(self.grid[row][col][0][0])
+            # check for duplicate values
+            for i in range(0,9):
+                if vals[i] in vals[i+1:]:
+                    return False
+        # check 3x3 grids
+        for y in range(0,7,3):
+            rows = [i for i in range(y,y+3)]
+            for x in range(0,7,3):
+                vals = []
+                cols = [i for i in range(x,x+3)]
+                for row in rows:
+                    for col in cols:
+                        vals.append(self.grid[row][col][0][0])
+                # check for duplicate values
+                for i in range(0,9):
+                    if vals[i] in vals[i+1:]:
+                        return False
+        return True
 
 #debug
+# set up window
+system('cls')
 s = Grid()
 s.InitializeGrid('sudoku.txt')
+print('Initial grid:')
 s.DrawGrid()
-
-'''
-g = []
-for x in range(0,9):
-    for y in range(0,9):
-        c = Cell(x,y)
-        g.append(c)
-
-# intialize grid from provided txt file
-g = InitializeGrid(g)
-DrawGrid(g)
 sleep(1)
 
-# start with a simple algorithm
-# for each cell in g
-#   check if .checked = false
-#   if false
-#       RemoveValue(row, col)
-for c in g:
-    if not c.checked:
-        g = RemoveValue(g, c)
-        DrawGrid(g)
+# use the simple scanning algorithm first
+while s.SimpleScanSinglePass():
+    system('cls')
+    print('Filling in squares...')
+    s.DrawGrid()
+    sleep(1)
+
+# are we done?
+if s.CheckIfSolved():
+    print('\n\nSOLVED')
+    exit()
+
+keepgoing = True
+while keepgoing: 
+    keepgoing = False
+    if s.FindOnlyValueInRow():
+        keepgoing = s.SimpleScanSinglePass()
+        system('cls')
+        print('Filling in squares...')
+        s.DrawGrid()
         sleep(1)
-'''
+    if s.FindOnlyValueInColumn():
+        keepgoing = s.SimpleScanSinglePass()
+        system('cls')
+        print('Filling in squares...') # remove...
+        s.DrawGrid()
+        sleep(1)
 
+# use the scanning algorithm again
+while s.SimpleScanSinglePass():
+    system('cls')
+    print('Filling in squares...')
+    s.DrawGrid()
+    sleep(1)
+system('cls')
+print('Filling in squares...')
+s.DrawGrid()
 
+# are we done?
+if s.CheckIfSolved():
+    print('\n\nSOLVED')
+    exit()
+
+print('\n\nI give up')
