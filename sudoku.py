@@ -129,6 +129,71 @@ class Grid:
                             self.grid[y][x][0] = [val]
         return foundmatch
 
+    def FindMatchingCellsInRow(self):
+        foundmatch = False
+        for y in range(0,9):
+            cellToCheck = []
+            numCells = 0
+
+            #print('Current cell values:')
+            #for x in range(0,9):
+                #print(self.grid[y][x][0])
+
+            for x in range(0,9):
+                if not self.grid[y][x][1]:
+                    cellToCheck = self.grid[y][x][0]
+                    numCells = 0
+                    for i in range(0,9):
+                        #print('Checking ' + str(cellToCheck) + ' and ' + str(self.grid[y][i][0]))
+                        if self.grid[y][i][0] == cellToCheck:
+                            #print('Adding numCells: ' + str(self.grid[y][i][0]))
+                            numCells += 1
+                    if numCells == len(cellToCheck):
+                        foundmatch = True
+                        #print('Match found: ' + str(cellToCheck))
+                        for j in range(0,9):
+                            if self.grid[y][j][0] != cellToCheck:
+                                #print('Cell before: ' + str(self.grid[y][j][0]))
+                                for val in cellToCheck:
+                                    if val in self.grid[y][j][0]:
+                                        self.RemoveValueFromCell(val,y,j)
+                                #print('Cell after: ' + str(self.grid[y][j][0]))
+                                sleep(1)
+        return foundmatch
+
+    def FindMatchingCellsInColumn(self):
+        foundmatch = False
+        for x in range(0,9):
+            cellToCheck = []
+            numCells = 0
+
+            #print('Current cell values:')
+            #for y in range(0,9):
+                #print(self.grid[y][x][0])
+
+            for y in range(0,9):
+                if not self.grid[y][x][1]:
+                    cellToCheck = self.grid[y][x][0]
+                    numCells = 0
+                    for i in range(0,9):
+                        #print('Checking ' + str(cellToCheck) + ' and ' + str(self.grid[i][x][0]))
+                        if self.grid[i][x][0] == cellToCheck:
+                            #print('Adding numCells: ' + str(self.grid[i][x][0]))
+                            numCells += 1
+                    if numCells == len(cellToCheck):
+                        foundmatch = True
+                        #print('Match found: ' + str(cellToCheck))
+                        for j in range(0,9):
+                            if self.grid[j][x][0] != cellToCheck:
+                                #print('Cell before: ' + str(self.grid[j][x][0]))
+                                for val in cellToCheck:
+                                    if val in self.grid[j][x][0]:
+                                        self.RemoveValueFromCell(val,j,x)
+                                #print('Cell after: ' + str(self.grid[j][x][0]))
+                                sleep(1)
+        return foundmatch
+
+
     def CheckIfSolved(self):
         # check if each cell has been checked
         for row in self.grid:
@@ -182,9 +247,9 @@ sleep(1)
 # use the simple scanning algorithm first
 while s.SimpleScanSinglePass():
     system('cls')
-    print('Filling in squares...')
+    print('Scanning the grid...')
     s.DrawGrid()
-    sleep(1)
+    #sleep(1)
 
 # are we done?
 if s.CheckIfSolved():
@@ -197,24 +262,62 @@ while keepgoing:
     if s.FindOnlyValueInRow():
         keepgoing = s.SimpleScanSinglePass()
         system('cls')
-        print('Filling in squares...')
+        print('Checking rows...')
         s.DrawGrid()
-        sleep(1)
+        #sleep(1)
     if s.FindOnlyValueInColumn():
         keepgoing = s.SimpleScanSinglePass()
         system('cls')
-        print('Filling in squares...') # remove...
+        print('Checking columns...') # remove...
         s.DrawGrid()
-        sleep(1)
+        #sleep(1)
 
 # use the scanning algorithm again
 while s.SimpleScanSinglePass():
     system('cls')
-    print('Filling in squares...')
+    print('Scanning the grid...')
     s.DrawGrid()
-    sleep(1)
+    #sleep(1)
 system('cls')
-print('Filling in squares...')
+print('Scanning the grid...')
+s.DrawGrid()
+
+# are we done?
+if s.CheckIfSolved():
+    print('\n\nSOLVED')
+    exit()
+
+# look for matched cells
+keepgoing = True
+while keepgoing:
+    keepgoing = False
+    system('cls')
+    print('Checking rows for matching cells...')
+    s.DrawGrid()
+    if s.FindMatchingCellsInRow():
+        keepgoing = s.SimpleScanSinglePass()
+        system('cls')
+        print('Checking rows for matching cells...')
+        s.DrawGrid()
+        #sleep(1)
+    system('cls')
+    print('Checking columns for matching cells...')
+    s.DrawGrid()
+    if s.FindMatchingCellsInColumn():
+        keepgoing = s.SimpleScanSinglePass()
+        system('cls')
+        print('Checking columns for matching cells...')
+        s.DrawGrid()
+        #sleep(1)
+
+# use the scanning algorithm again
+while s.SimpleScanSinglePass():
+    system('cls')
+    print('Scanning the grid...')
+    s.DrawGrid()
+    #sleep(1)
+system('cls')
+print('Scanning the grid...')
 s.DrawGrid()
 
 # are we done?
@@ -223,3 +326,7 @@ if s.CheckIfSolved():
     exit()
 
 print('\n\nI give up')
+print('\nCell values:')
+for row in s.grid:
+    for col in row:
+        print(col[0])
