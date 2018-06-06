@@ -1,13 +1,37 @@
+"""This is my sudoku module
+
+Other info goes here
+"""
+# create single function for each strategy
+#   run all three possiblities and call check_cells within
+# subgroup_exclusion
+# hidden_twin
+# chain
+
+__version__ = '0.1'
+__author__ = 'Jon Altenburger'
+
 from time import sleep
 from os import system
 from math import floor
 from sys import exit
 
-class Grid:
-    def __init__(self):
-        self.grid = [[[[1,2,3,4,5,6,7,8,9], False] for i in range(0,9)] for j in range(0,9)]
 
-    def DrawGrid(self):
+class Grid:
+    """Class docstring goes here
+    """
+    def __init__(self):
+        """Docstring goes here
+        """
+        self.grid = [
+                [
+                [[1,2,3,4,5,6,7,8,9], False] for i in range(0,9)
+                ] for j in range(0,9)
+                ]
+
+    def draw(self):
+        """Docstring goes here
+        """
         print(' _______________________ ')
         print('|       |       |       |')
         for row in range(0,9):
@@ -26,7 +50,9 @@ class Grid:
                 print('|       |       |       |')
         print('|_______|_______|_______|')
 
-    def InitializeGrid(self,path):
+    def init(self,path):
+        """Docstring goes here
+        """
         f = open(path)
         r = 0
         for l in f.readlines():
@@ -37,26 +63,34 @@ class Grid:
             r += 1
         f.close()
 
-    def RemoveValueFromCell(self,value,row,col):
+    def remove_value_cell(self,value,row,col):
+        """Docstring goes here
+        """
         if value in self.grid[row][col][0] and len(self.grid[row][col][0]) > 1:
             self.grid[row][col][0].remove(value)
 
-    def RemoveValueFromRow(self,value,row):
+    def remove_value_row(self,value,row):
+        """Docstring goes here
+        """
         for col in range(0,9):
-            self.RemoveValueFromCell(value,row,col)
+            self.remove_value_cell(value,row,col)
 
-    def RemoveValueFromColumn(self,value,col):
+    def remove_value_column(self,value,col):
+        """Docstring goes here
+        """
         for row in range(0,9):
-            self.RemoveValueFromCell(value,row,col)
+            self.remove_value_cell(value,row,col)
 
-    def RemoveValueFromGroup(self,value,row,col):
+    def remove_value_group(self,value,row,col):
+        """Docstring goes here
+        """
         y = 3 * floor(row/3)
         x = 3 * floor(col/3)
         rows = [i for i in range(y,y+3)]
         cols = [j for j in range(x,x+3)]
         for r in rows:
             for c in cols:
-                self.RemoveValueFromCell(value,r,c)
+                self.remove_value_cell(value,r,c)
 
     # this function probably isn't necessary
     def ResetCheckFlags(self):
@@ -64,20 +98,24 @@ class Grid:
             for col in row:
                 col[1] = False
 
-    def SimpleScanSinglePass(self):
+    def check_cells(self):
+        """Docstring goes here
+        """
         foundmatch = False
         for row in range(0,9):
             for col in range(0,9):
                 if len(self.grid[row][col][0]) == 1 and not self.grid[row][col][1]:
                     foundmatch = True
                     value = self.grid[row][col][0][0]
-                    self.RemoveValueFromColumn(value,col)
-                    self.RemoveValueFromRow(value,row)
-                    self.RemoveValueFromGroup(value,row,col)
+                    self.remove_value_column(value,col)
+                    self.remove_value_row(value,row)
+                    self.remove_value_group(value,row,col)
                     self.grid[row][col][1] = True
         return foundmatch
 
-    def FindOnlyValueInRow(self):
+    def single_possibility_row(self):
+        """Docstring goes here
+        """
         foundmatch = False
         for row in self.grid:
             missingValues = []
@@ -103,7 +141,9 @@ class Grid:
                             col[0] = [val]
         return foundmatch
 
-    def FindOnlyValueInColumn(self):
+    def single_possiblity_column(self):
+        """Docstring goes here
+        """
         foundmatch = False
         for x in range(0,9):
             missingValues = []
@@ -129,72 +169,118 @@ class Grid:
                             self.grid[y][x][0] = [val]
         return foundmatch
 
-    def FindMatchingCellsInRow(self):
+    def single_possibility_group(self):
+        """Docstring goes here
+        """
+        foundmatch = False
+        for y in range(0,7,3):
+            rows = [i for i in range(y,y+3)]
+            for x in range(0,7,3):
+                cols = [i for i in range(x,x+3)]
+                missingValues = []
+                seenValues = []
+                for row in rows:
+                    for col in cols:
+                        if not self.grid[row][col][1]:
+                            for val in self.grid[row][col][0]:
+                                if val not in missingValues:
+                                    missingValues.append(val)
+                for row in rows:
+                    for col in cols:
+                        if not self.grid[row][col][1]:
+                            for val in self.grid[row][col][0]:
+                                if val not in seenValues:
+                                    seenValues.append(val)
+                                else:
+                                    if val in missingValues:
+                                        missingValues.remove(val)
+                if len(missingValues) > 0:
+                    foundmatch = True
+                    for val in missingValues:
+                        for row in rows:
+                            for col in cols:
+                                if val in self.grid[row][col][0]:
+                                    self.grid[row][col][0] = [val]
+        return foundmatch
+
+    def naked_twin_row(self):
+        """Docstring goes here
+        """
         foundmatch = False
         for y in range(0,9):
             cellToCheck = []
             numCells = 0
-
-            #print('Current cell values:')
-            #for x in range(0,9):
-                #print(self.grid[y][x][0])
-
             for x in range(0,9):
                 if not self.grid[y][x][1]:
                     cellToCheck = self.grid[y][x][0]
                     numCells = 0
                     for i in range(0,9):
-                        #print('Checking ' + str(cellToCheck) + ' and ' + str(self.grid[y][i][0]))
                         if self.grid[y][i][0] == cellToCheck:
-                            #print('Adding numCells: ' + str(self.grid[y][i][0]))
                             numCells += 1
                     if numCells == len(cellToCheck):
                         foundmatch = True
-                        #print('Match found: ' + str(cellToCheck))
                         for j in range(0,9):
                             if self.grid[y][j][0] != cellToCheck:
-                                #print('Cell before: ' + str(self.grid[y][j][0]))
                                 for val in cellToCheck:
                                     if val in self.grid[y][j][0]:
-                                        self.RemoveValueFromCell(val,y,j)
-                                #print('Cell after: ' + str(self.grid[y][j][0]))
-                                sleep(1)
+                                        self.remove_value_cell(val,y,j)
         return foundmatch
 
-    def FindMatchingCellsInColumn(self):
+    def naked_twin_column(self):
+        """Docstring goes here
+        """
         foundmatch = False
         for x in range(0,9):
             cellToCheck = []
             numCells = 0
-
-            #print('Current cell values:')
-            #for y in range(0,9):
-                #print(self.grid[y][x][0])
-
             for y in range(0,9):
                 if not self.grid[y][x][1]:
                     cellToCheck = self.grid[y][x][0]
                     numCells = 0
                     for i in range(0,9):
-                        #print('Checking ' + str(cellToCheck) + ' and ' + str(self.grid[i][x][0]))
                         if self.grid[i][x][0] == cellToCheck:
-                            #print('Adding numCells: ' + str(self.grid[i][x][0]))
                             numCells += 1
                     if numCells == len(cellToCheck):
                         foundmatch = True
-                        #print('Match found: ' + str(cellToCheck))
                         for j in range(0,9):
                             if self.grid[j][x][0] != cellToCheck:
-                                #print('Cell before: ' + str(self.grid[j][x][0]))
                                 for val in cellToCheck:
                                     if val in self.grid[j][x][0]:
-                                        self.RemoveValueFromCell(val,j,x)
-                                #print('Cell after: ' + str(self.grid[j][x][0]))
-                                sleep(1)
+                                        self.remove_value_cell(val,j,x)
         return foundmatch
 
+    def naked_twin_group(self):
+        """Docstring goes here
+        """
+        foundmatch = False
+        for y in range(0,7,3):
+            rows = [i for i in range(y,y+3)]
+            for x in range(0,7,3):
+                cols = [i for i in range(x,x+3)]
+                cellToCheck = []
+                numCells = 0
+                for row in rows:
+                    for col in cols:
+                        if not self.grid[row][col][1]:
+                            cellToCheck = self.grid[row][col][0]
+                            numCells = 0
+                            for i in rows:
+                                for j in cols:
+                                    if self.grid[i][j][0] == cellToCheck:
+                                        numCells += 1
+                            if numCells == len(cellToCheck):
+                                foundmatch = True
+                                for i in rows:
+                                    for j in cols:
+                                        if self.grid[i][j][0] != cellToCheck:
+                                            for val in cellToCheck:
+                                                if val in self.grid[i][j][0]:
+                                                    self.remove_value_cell(val,i,j)
+        return foundmatch
 
-    def CheckIfSolved(self):
+    def is_solved(self):
+        """Docstring goes here
+        """
         # check if each cell has been checked
         for row in self.grid:
             for col in row:
@@ -235,55 +321,71 @@ class Grid:
                         return False
         return True
 
+
 #debug
 # set up window
 system('cls')
 s = Grid()
-s.InitializeGrid('sudoku.txt')
+s.init('sudoku.txt')
 print('Initial grid:')
-s.DrawGrid()
+s.draw()
 sleep(1)
 
 # use the simple scanning algorithm first
-while s.SimpleScanSinglePass():
+while s.check_cells():
     system('cls')
     print('Scanning the grid...')
-    s.DrawGrid()
-    #sleep(1)
+    s.draw()
+    sleep(1)
 
 # are we done?
-if s.CheckIfSolved():
+if s.is_solved():
     print('\n\nSOLVED')
     exit()
 
 keepgoing = True
 while keepgoing: 
     keepgoing = False
-    if s.FindOnlyValueInRow():
-        keepgoing = s.SimpleScanSinglePass()
+    system('cls')
+    print('Checking rows...')
+    s.draw()
+    if s.single_possibility_row():
+        keepgoing = s.check_cells()
         system('cls')
         print('Checking rows...')
-        s.DrawGrid()
-        #sleep(1)
-    if s.FindOnlyValueInColumn():
-        keepgoing = s.SimpleScanSinglePass()
+        s.draw()
+        sleep(1)
+    system('cls')
+    print('Checking columns...') # remove...
+    s.draw()
+    if s.single_possiblity_column():
+        keepgoing = s.check_cells()
         system('cls')
         print('Checking columns...') # remove...
-        s.DrawGrid()
-        #sleep(1)
+        s.draw()
+        sleep(1)
+    system('cls')
+    print('Checking groups...') # remove...
+    s.draw()
+    if s.single_possibility_group():
+        keepgoing = s.check_cells()
+        system('cls')
+        print('Checking groups...') # remove...
+        s.draw()
+        sleep(1)
 
 # use the scanning algorithm again
-while s.SimpleScanSinglePass():
+while s.check_cells():
     system('cls')
     print('Scanning the grid...')
-    s.DrawGrid()
-    #sleep(1)
+    s.draw()
+    sleep(1)
 system('cls')
 print('Scanning the grid...')
-s.DrawGrid()
+s.draw()
 
 # are we done?
-if s.CheckIfSolved():
+if s.is_solved():
     print('\n\nSOLVED')
     exit()
 
@@ -293,35 +395,44 @@ while keepgoing:
     keepgoing = False
     system('cls')
     print('Checking rows for matching cells...')
-    s.DrawGrid()
-    if s.FindMatchingCellsInRow():
-        keepgoing = s.SimpleScanSinglePass()
+    s.draw()
+    if s.naked_twin_row():
+        keepgoing = s.check_cells()
         system('cls')
         print('Checking rows for matching cells...')
-        s.DrawGrid()
-        #sleep(1)
+        s.draw()
+        sleep(1)
     system('cls')
     print('Checking columns for matching cells...')
-    s.DrawGrid()
-    if s.FindMatchingCellsInColumn():
-        keepgoing = s.SimpleScanSinglePass()
+    s.draw()
+    if s.naked_twin_column():
+        keepgoing = s.check_cells()
         system('cls')
         print('Checking columns for matching cells...')
-        s.DrawGrid()
-        #sleep(1)
+        s.draw()
+        sleep(1)
+    system('cls')
+    print('Checking groups for matching cells...')
+    s.draw()
+    if s.naked_twin_group():
+        keepgoing = s.check_cells()
+        system('cls')
+        print('Checking groups for matching cells...')
+        s.draw()
+        sleep(1)
 
 # use the scanning algorithm again
-while s.SimpleScanSinglePass():
+while s.check_cells():
     system('cls')
     print('Scanning the grid...')
-    s.DrawGrid()
-    #sleep(1)
+    s.draw()
+    sleep(1)
 system('cls')
 print('Scanning the grid...')
-s.DrawGrid()
+s.draw()
 
 # are we done?
-if s.CheckIfSolved():
+if s.is_solved():
     print('\n\nSOLVED')
     exit()
 
